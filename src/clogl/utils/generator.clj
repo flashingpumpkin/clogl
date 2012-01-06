@@ -7,7 +7,8 @@
   (:require [clojure.string :as s]
             [clojure.java.io :as io])
   (:import [org.lwjgl.opengl GL11 GL12 GL13 GL14 GL15 GL20 GL21 GL30 GL31 GL32 
-            GL33 GL40 Display ]))
+            GL33 GL40 Display ]
+           [org.lwjgl.input Keyboard Mouse]))
 
 (defn renamer [name-fn method]
   "Rename camelCaseMethods to hyphenated-methods"
@@ -29,7 +30,7 @@
 (defn field-import [cls-symbol]
   (fn [field]
     (create-line "import-field" cls-symbol (field-name field)
-                 (s/replace  (renamer field-name field) #"\_" "-" ))))
+                 (renamer field-name field))))
 
 (defn is-gl-method [method]
   "Ungyl ugly ugly. Need to implement something like (starts-with? string search)"
@@ -95,7 +96,15 @@
   (let [w write-to-file]
     (w "clogl.opengl.display" "src/clogl/opengl/display.clj" (for-class Display no-java-methods get-fields))))
 
-(defn import []
+(defn import-input-api []
+  "Import the input API"
+  (let [w write-to-file]
+    (w "clogl.input.keyboard" "src/clogl/input/keyboard.clj" (for-class Keyboard no-java-methods get-fields))
+    (w "clogl.input.mouse" "src/clogl/input/mouse.clj" (for-class Mouse no-java-methods get-fields))))
+
+
+(defn import-apis []
   "Import all the APIs. Run this from the root of this project to generate the files."
   (import-gl-api)
-  (import-display-api))
+  (import-display-api)
+  (import-input-api))
