@@ -29,10 +29,17 @@
 (defn get-cls-method
   "Return the first method on a class matching a given name.
 
-  user=> (get-method System \"currentTimeMillis\")"
+  user=> (get-cls-method System \"currentTimeMillis\")"
   [class the-method]
   (first (filter #(= (method-name %) the-method)
                  (get-methods class))))
+
+(defn get-cls-methods
+  "Return all methods on a class matching a given name.
+
+   user=> (get-cls-methods System \"currentTimeMillis\")"
+  [class the-method]
+  (filter #(= (method-name %) the-method) (get-methods class)))
 
 (defn get-cls-field
   "Return the field on a class matching the given name"
@@ -59,12 +66,6 @@
   [class import-what import-as]
   (let [the-class (. Class forName (str class))]
     `(def ~import-as (. ~class ~import-what))))
-
-(defmacro import-cls-method
-  "Import public static methods from classes directly
-   user=> (import-cls-method System currentTimeMillis millis"
-  [cls]
-  `~'cls)
 
 
 (import-method java.lang.System currentTimeMillis millis)
