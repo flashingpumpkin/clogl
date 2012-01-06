@@ -1,4 +1,7 @@
-(ns gltut.importer
+; Module to help import static methods and fields into 
+; the current namespace as proper functions and defs
+
+(ns clogl.utils.importer
   (:import [java.lang.reflect Method Field]))
 
 (defn get-methods
