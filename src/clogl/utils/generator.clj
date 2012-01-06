@@ -75,9 +75,7 @@
       (.write writer "\n"))))
 
 (defn import-gl-api []
-  "Import the OpenGL API. Each OpenGL version gets a seperate file and
-   namespace. Run this function from the root of the project to
-   regenerate all the files"
+  "Import the OpenGL API"
   (let [w write-to-file]
     (w "clogl.opengl.gl11" "src/clogl/opengl/gl11.clj" (for-class GL11 gl-methods get-fields))
     (w "clogl.opengl.gl12" "src/clogl/opengl/gl12.clj" (for-class GL12 gl-methods get-fields))
@@ -93,11 +91,11 @@
     (w "clogl.opengl.gl40" "src/clogl/opengl/gl40.clj" (for-class GL40 gl-methods get-fields))))
 
 (defn import-display-api []
-  "Import the Display API. Note that this does *not* import cleanly everything. The generated
-   file needs to be cleaned up from the standard Java methods like toString"
+  "Import the Display API"
   (let [w write-to-file]
     (w "clogl.opengl.display" "src/clogl/opengl/display.clj" (for-class Display no-java-methods get-fields))))
 
 (defn import []
+  "Import all the APIs. Run this from the root of this project to generate the files."
   (import-gl-api)
   (import-display-api))
